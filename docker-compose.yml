@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  mysql-db:
+    image: mysql:8.0
+    container_name: jobshield-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password_123
+      MYSQL_DATABASE: jobshield_db
+      MYSQL_USER: jobshield_user
+      MYSQL_PASSWORD: jobshield_pass_123
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./backend/src/main/resources/schema.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - jobshield-net
+
+  ml-service:
+    build:
+      context: ./ml-service
+      dockerfile: Dockerfile
+    container_name: jobshield-ml
+    restart: always
+    environment:
+      - INTERNAL_SECRET=JobShieldInternalMLKey_2026
+      - PORT=8001
+    ports:
+      - "8001:8001"
+    networks:
+      - jobshield-net
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: jobshield-backend
+    restart: always
+    depends_on:
+      - mysql-db
+      - ml-service
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/jobshield_db?useSSL=false&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=jobshield_user
+      - SPRING_DATASOURCE_PASSWORD=jobshield_pass_123
+      - ML_SERVICE_URL=http://ml-service:8001
+      - ML_INTERNAL_SECRET=JobShieldInternalMLKey_2026
+      - JWT_SECRET=5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437
+    ports:
+      - "8080:8080"
+    networks:
+      - jobshield-net
+
+volumes:
+  mysql_data:
+
+networks:
+  jobshield-net:
+    driver: bridge
+

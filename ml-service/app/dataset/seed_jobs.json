@@ -1,0 +1,73 @@
+[
+  {
+    "id": "SCAM-01",
+    "label": 1,
+    "title": "Data Entry Operator / Typist",
+    "company": "National Data Services",
+    "text": "Urgent requirement for online data entry typist. Work from home 2 hours daily on mobile or computer. Earn Rs 45000 per month. No interview required direct selection. Pay refundable registration fee Rs 1500 to activate employee portal via GPay or PhonePe to hr.datacareers@gmail.com. Immediate joining letter provided."
+  },
+  {
+    "id": "SCAM-02",
+    "label": 1,
+    "title": "Junior Software Engineer",
+    "company": "Tata Consultancy Services (Claimed)",
+    "text": "TCS Off-Campus Drive 2026. Direct appointment for freshers batch 2023-2026. CTC 8.5 LPA. No technical interview required. Selected candidates must deposit refundable security deposit of Rs 3500 for company laptop courier and training kit. Contact HR Priya on WhatsApp +919876543210. Send payment screenshot to hr.tcsrecruitment@yahoo.com."
+  },
+  {
+    "id": "SCAM-03",
+    "label": 1,
+    "title": "Back Office Assistant",
+    "company": "Wipro Technologies (Purported)",
+    "text": "Wipro hiring back office assistants for home office setup. Salary Rs 55000 monthly. Guaranteed placement. Interview conducted strictly on Telegram @WiproCareersHelp. Pay verification fee Rs 2000 through UPI scanner attached. Do not apply on official portal."
+  },
+  {
+    "id": "SCAM-04",
+    "label": 1,
+    "title": "Airline Ground Staff",
+    "company": "IndiGo Airlines Recruitment",
+    "text": "Urgent opening for Airport Ground Staff and Cabin Crew. Qualification 10th or 12th pass. Salary Rs 40000 plus cab facility. Spot offer letter issued. Pay Rs 2500 medical fitness and uniform charge to account number provided on WhatsApp. Seats filling fast apply today."
+  },
+  {
+    "id": "SCAM-05",
+    "label": 1,
+    "title": "Amazon Customer Support Associate",
+    "company": "Amazon India",
+    "text": "Work from home customer support associate for Amazon. Package Rs 60000 per month with free laptop and wifi reimbursement. Send your bank passbook copy, Aadhaar card, and processing fee of Rs 1200 to amazon.recruitment.india@gmail.com for instant onboarding."
+  },
+  {
+    "id": "LEGIT-01",
+    "label": 0,
+    "title": "Systems Engineer",
+    "company": "Infosys Limited",
+    "text": "Infosys is hiring Systems Engineers across Pune, Bengaluru, and Hyderabad locations. Candidates should have a BE, BTech, ME, or MTech in Computer Science or Information Technology with 0-2 years of experience. Required skills include Java, Spring Boot, SQL, and problem solving. Selection involves an online proctored aptitude assessment followed by technical and HR interview rounds via Microsoft Teams. Infosys does not charge any fee at any stage of its recruitment process. Apply online via https://career.infosys.com."
+  },
+  {
+    "id": "LEGIT-02",
+    "label": 0,
+    "title": "Associate Software Engineer",
+    "company": "Tata Consultancy Services",
+    "text": "Tata Consultancy Services invites applications for the TCS NQT hiring program. Open to engineering graduates from recognized universities. The role requires foundational knowledge in algorithms, data structures, and Python or Java programming. The hiring process consists of the National Qualifier Test followed by an in-person or video panel interview. Official communications are sent solely from corporate email addresses ending in @tcs.com. We strictly do not ask for security deposits."
+  },
+  {
+    "id": "LEGIT-03",
+    "label": 0,
+    "title": "Frontend Developer",
+    "company": "Razorpay",
+    "text": "Razorpay is looking for a Frontend Developer with 2-4 years of hands-on experience in React, TypeScript, and modern state management. You will work on scalable fintech payment checkout workflows. The interview stages include a preliminary recruiter screen, technical architecture deep dive, live coding session, and leadership principles round. Official applications are processed exclusively via greenhouse.io and our careers page at razorpay.com/jobs."
+  },
+  {
+    "id": "LEGIT-04",
+    "label": 0,
+    "title": "Cloud Operations Engineer",
+    "company": "Google Cloud India",
+    "text": "Google Cloud is seeking Cloud Operations Associates to support enterprise Kubernetes and BigQuery workloads. Qualifications: BS degree in CS or equivalent practical experience. Responsibilities include automated incident response, CI/CD pipeline maintenance, and cloud infrastructure monitoring. Interviews are scheduled through Google Meet with authorized Google recruiters possessing @google.com email domains."
+  },
+  {
+    "id": "LEGIT-05",
+    "label": 0,
+    "title": "Quality Assurance Automation Engineer",
+    "company": "Cognizant",
+    "text": "Cognizant Technology Solutions is seeking QA Automation Engineers with proficiency in Selenium WebDriver, TestNG, and CI/CD pipelines using Jenkins. 1 to 3 years experience required. All interviews are coordinated through our talent acquisition team via Cognizant official portal. Cognizant never charges any recruitment or training fees."
+  }
+]
+

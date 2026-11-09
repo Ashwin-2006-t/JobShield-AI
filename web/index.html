@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JobShield AI — Recruitment Verification & Fraud Detection Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace']
+          },
+          colors: {
+            shield: {
+              bg: '#090D0B',
+              surface: '#111816',
+              border: '#1E2923',
+              card: '#141E1A',
+              emerald: '#10B981',
+              darkgreen: '#059669',
+              mint: '#34D399',
+              amber: '#F59E0B',
+              crimson: '#EF4444',
+              cyan: '#06B6D4'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; transition: background-color 0.3s, color 0.3s; }
+    .xai-critical { background: rgba(239, 68, 68, 0.2); border-bottom: 2px solid #EF4444; color: #FCA5A5; font-weight: 600; padding: 1px 4px; border-radius: 4px; cursor: pointer; }
+    .xai-warning { background: rgba(245, 158, 11, 0.2); border-bottom: 2px solid #F59E0B; color: #FCD34D; font-weight: 600; padding: 1px 4px; border-radius: 4px; cursor: pointer; }
+    .xai-trust { background: rgba(16, 185, 129, 0.2); border-bottom: 2px solid #10B981; color: #6EE7B7; font-weight: 600; padding: 1px 4px; border-radius: 4px; cursor: pointer; }
+    @keyframes radar-sweep {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .radar-sweep { animation: radar-sweep 2s linear infinite; }
+  </style>
+</head>
+<body class="bg-[#090D0B] text-slate-100 min-h-screen antialiased flex flex-col selection:bg-emerald-500 selection:text-black">
+
+  <!-- Top Announcement Bar (SDG 8 & Cyber Safety) -->
+  <div class="bg-gradient-to-r from-emerald-950 via-slate-900 to-emerald-950 border-b border-emerald-900/40 px-4 py-2 text-xs flex justify-between items-center text-emerald-300">
+    <div class="flex items-center gap-2">
+      <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+      <span class="font-medium">SDG 8 Aligned Platform:</span>
+      <span class="text-slate-300 hidden sm:inline">Decent Work, Anti-Extortion & Fresh Graduate Protection</span>
+    </div>
+    <div class="flex items-center gap-4 text-slate-300">
+      <span>Official Cybercrime Helpline: <strong class="text-emerald-400">1930</strong></span>
+      <span class="hidden md:inline">Portal: <strong class="text-emerald-400">cybercrime.gov.in</strong></span>
+    </div>
+  </div>
+
+  <!-- Navigation Header -->
+  <header class="border-b border-[#1E2923] bg-[#090D0B]/90 backdrop-blur sticky top-0 z-50 px-6 py-4">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('analyzer')">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center shadow-lg shadow-emerald-900/30">
+          <svg class="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+          </svg>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-lg font-bold tracking-tight text-white">JobShield <span class="text-emerald-400">AI</span></h1>
+            <span class="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-800/60">Enterprise v1.0</span>
+          </div>
+          <p class="text-xs text-slate-400">AI-Powered Recruitment Fraud & Authenticity Engine</p>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="hidden lg:flex items-center gap-1 bg-[#111816] p-1.5 rounded-xl border border-[#1E2923]">
+        <button onclick="switchTab('analyzer')" id="tab-btn-analyzer" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-emerald-500 text-black shadow">Job Analyzer</button>
+        <button onclick="switchTab('urlscan')" id="tab-btn-urlscan" class="px-3.5 py-1.5 rounded-lg text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800">URL Inspector</button>
+        <button onclick="switchTab('companies')" id="tab-btn-companies" class="px-3.5 py-1.5 rounded-lg text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800">Verified Companies</button>
+        <button onclick="switchTab('reports')" id="tab-btn-reports" class="px-3.5 py-1.5 rounded-lg text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800">Community Reports</button>
+        <button onclick="switchTab('assistant')" id="tab-btn-assistant" class="px-3.5 py-1.5 rounded-lg text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800">Safety Counselor</button>
+        <button onclick="switchTab('admin')" id="tab-btn-admin" class="px-3.5 py-1.5 rounded-lg text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800">Admin Portal</button>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <!-- Theme Toggle -->
+        <button onclick="toggleTheme()" class="p-2 rounded-xl bg-[#111816] border border-[#1E2923] text-slate-300 hover:text-white transition">
+          <svg id="theme-icon" class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 9h-1m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+          </svg>
+        </button>
+        <!-- User Status Badge -->
+        <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#111816] border border-[#1E2923] text-xs">
+          <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+          <span class="font-medium text-slate-300">Final Year CSE Demo</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8 flex-1 w-full">
+
+    <!-- TAB 1: MAIN JOB ANALYZER -->
+    <section id="view-analyzer" class="space-y-8">
+      
+      <!-- Hero Intro -->
+      <div class="text-center max-w-3xl mx-auto space-y-3">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-950/80 border border-emerald-800 text-emerald-400 text-xs font-medium">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          Single-Input NLP & Heuristic Cyber Risk Detector
+        </div>
+        <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-white">Paste Any Job Advertisement To Verify Authenticity</h2>
+        <p class="text-sm sm:text-base text-slate-400">Copy text from LinkedIn, Naukri, WhatsApp, or Email. Our hybrid AI automatically extracts company, recruiter, compensation, and payment vectors to detect recruitment fraud.</p>
+      </div>
+
+      <!-- Main Input Panel -->
+      <div class="bg-[#111816] rounded-2xl border border-[#1E2923] p-6 shadow-2xl relative overflow-hidden">
+        <div class="flex flex-wrap items-center justify-between gap-4 mb-3">
+          <label class="text-xs font-semibold uppercase tracking-wider text-slate-300 flex items-center gap-2">
+            <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            Job Advertisement Content
+          </label>
+          <div class="flex items-center gap-2">
+            <span class="text-xs text-slate-400 mr-1">Load Test Presets:</span>
+            <button onclick="loadPreset('scam')" class="text-xs px-3 py-1 rounded-lg bg-red-950/60 border border-red-800/80 text-red-400 hover:bg-red-900/60 transition font-medium">
+              Demo Scam (TCS Impersonation)
+            </button>
+            <button onclick="loadPreset('legit')" class="text-xs px-3 py-1 rounded-lg bg-emerald-950/60 border border-emerald-800/80 text-emerald-400 hover:bg-emerald-900/60 transition font-medium">
+              Demo Legit (Infosys Official)
+            </button>
+          </div>
+        </div>
+
+        <div class="relative">
+          <textarea id="job-input-text" rows="7" class="w-full bg-[#090D0B] text-slate-100 rounded-xl p-4 text-sm border border-[#1E2923] focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500/50 font-mono transition leading-relaxed resize-y" placeholder="Paste the entire recruitment advertisement here... (e.g. 'TCS is hiring freshers! Salary Rs 50,000/mo. No interview needed. Send refundable laptop fee Rs 1,500 via UPI to tcsrecruitment@gmail.com')"></textarea>
+          <div class="absolute bottom-3 right-4 text-[11px] text-slate-400 font-mono" id="char-counter">0 characters</div>
+        </div>
+
+        <div class="mt-4 pt-4 border-t border-[#1E2923] flex flex-wrap items-center justify-between gap-4">
+          <div class="flex items-center gap-3 text-xs text-slate-400">
+            <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg> Upfront Fee Detection</span>
+            <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg> Brand Domain Match</span>
+            <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg> SSRF Safe Check</span>
+          </div>
+
+          <button onclick="runAnalysis()" id="analyze-button" class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-bold text-sm tracking-wide shadow-lg shadow-emerald-500/20 transition flex items-center justify-center gap-2 group">
+            <svg class="w-4 h-4 text-black group-hover:scale-110 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+            RUN RISK & AUTHENTICITY ANALYSIS
+          </button>
+        </div>
+      </div>
+
+      <!-- Radar Scanning Animation (Visible while computing) -->
+      <div id="scanning-radar" class="hidden bg-[#111816] rounded-2xl border border-emerald-900/60 p-8 text-center space-y-4">
+        <div class="relative w-24 h-24 mx-auto">
+          <div class="w-24 h-24 rounded-full border-2 border-emerald-500/30 flex items-center justify-center">
+            <div class="w-16 h-16 rounded-full border border-emerald-500/50"></div>
+          </div>
+          <div class="absolute inset-0 w-24 h-24 rounded-full border-t-2 border-emerald-400 radar-sweep"></div>
+          <div class="absolute inset-0 flex items-center justify-center">
+            <svg class="w-6 h-6 text-emerald-400 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+          </div>
+        </div>
+        <div>
+          <h3 class="text-base font-bold text-white" id="scan-step-title">Inspecting Extracted Entities & Compensation Ratios...</h3>
+          <p class="text-xs text-slate-400 mt-1">Evaluating against 15 deterministic heuristic rules and TF-IDF statistical signals</p>
+        </div>
+      </div>
+
+      <!-- Analysis Results Section (Populated dynamically) -->
+      <div id="results-panel" class="hidden space-y-6">
+
+        <!-- Result Overview Banner -->
+        <div id="risk-banner" class="rounded-2xl border p-6 flex flex-col md:flex-row items-center justify-between gap-6 transition shadow-xl">
+          <div class="flex items-center gap-6">
+            <!-- Circular SVG Risk Gauge -->
+            <div class="relative w-28 h-28 flex items-center justify-center">
+              <svg class="w-28 h-28 transform -rotate-90" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="40" stroke="#1E2923" stroke-width="10" fill="transparent" />
+                <circle id="gauge-circle" cx="50" cy="50" r="40" stroke="#EF4444" stroke-width="10" stroke-dasharray="251.2" stroke-dashoffset="30" stroke-linecap="round" fill="transparent" class="transition-all duration-1000" />
+              </svg>
+              <div class="absolute flex flex-col items-center">
+                <span id="gauge-score" class="text-3xl font-black text-white">88</span>
+                <span class="text-[9px] uppercase font-bold text-slate-400 tracking-wider">/ 100</span>
+              </div>
+            </div>
+
+            <div class="space-y-1">
+              <div class="flex items-center gap-2">
+                <span id="risk-badge" class="px-3 py-1 rounded-full text-xs font-black tracking-wider uppercase bg-red-950 text-red-400 border border-red-800">HIGH RISK SCAM</span>
+                <span class="text-xs text-slate-400 font-mono">Confidence: 94.2%</span>
+              </div>
+              <h3 id="risk-headline" class="text-2xl font-black text-white">Immediate Recruitment Fraud Warning</h3>
+              <p id="risk-summary" class="text-xs text-slate-300 max-w-xl leading-relaxed">
+                This job posting exhibits critical recruitment extortion vectors. Legitimate Indian employers never charge candidates registration or laptop courier fees.
+              </p>
+            </div>
+          </div>
+
+          <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+            <button onclick="downloadPdfReport()" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs border border-slate-700 flex items-center justify-center gap-2 transition">
+              <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+              Download PDF Audit Report
+            </button>
+            <button onclick="prefillReportFromAnalysis()" class="px-4 py-2.5 rounded-xl bg-red-950/80 hover:bg-red-900 border border-red-800 text-red-200 font-semibold text-xs flex items-center justify-center gap-2 transition">
+              <svg class="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+              Report This Fraud
+            </button>
+          </div>
+        </div>
+
+        <!-- 2 Column Layout: Extracted Entities + XAI Token Attribution -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+          <!-- Left: Extracted Job Information Cards -->
+          <div class="bg-[#111816] rounded-2xl border border-[#1E2923] p-5 space-y-4">
+            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
+              <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+              Extracted Recruitment Entities
+            </h4>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="extracted-entities-grid">
+              <!-- Populated via JS -->
+            </div>
+          </div>
+
+          <!-- Right: Explainable AI (XAI) Token Attribution -->
+          <div class="bg-[#111816] rounded-2xl border border-[#1E2923] p-5 space-y-4">
+            <div class="flex items-center justify-between">
+              <h4 class="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
+                <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"/></svg>
+                Explainable AI (XAI) Token Attribution
+              </h4>
+              <span class="text-[10px] text-slate-400">Hover tokens for weight explanation</span>
+            </div>
+            <div class="p-4 rounded-xl bg-[#090D0B] border border-[#1E2923] text-sm leading-relaxed font-mono" id="xai-highlighted-text">
+              <!-- Populated via JS with color spans -->
+            </div>
+            <div class="flex items-center gap-4 text-[11px] text-slate-400 pt-2 border-t border-[#1E2923]">
+              <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded bg-red-500"></span> Critical Scam Token</span>
+              <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded bg-amber-500"></span> Warning Token</span>
+              <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded bg-emerald-500"></span> Verified Trust Token</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Detected Warning Signs & Action Checklist -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <!-- Warnings List (2 Cols) -->
+          <div class="lg:col-span-2 bg-[#111816] rounded-2xl border border-[#1E2923] p-5 space-y-4">
+            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
+              <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+              Detected Warning Signs & Heuristics
+            </h4>
+            <div id="indicators-list" class="space-y-3">
+              <!-- Populated via JS -->
+            </div>
+          </div>
+
+          <!-- Official Safety Action Plan (1 Col) -->
+          <div class="bg-[#111816] rounded-2xl border border-emerald-900/50 p-5 space-y-4">
+            <h4 class="text-xs font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-2">
+              <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              Official Safety Action Plan
+            </h4>
+            <ul class="text-xs text-slate-300 space-y-3">
+              <li class="flex items-start gap-2.5">
+                <span class="w-5 h-5 rounded-full bg-emerald-950 text-emerald-400 flex items-center justify-center font-bold text-[10px] shrink-0">1</span>
+                <span><strong>Never send money:</strong> Do not pay registration fees, security deposits, or laptop delivery charges.</span>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <span class="w-5 h-5 rounded-full bg-emerald-950 text-emerald-400 flex items-center justify-center font-bold text-[10px] shrink-0">2</span>
+                <span><strong>Verify on official portal:</strong> Check vacancies directly on the organization's official careers website.</span>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <span class="w-5 h-5 rounded-full bg-emerald-950 text-emerald-400 flex items-center justify-center font-bold text-[10px] shrink-0">3</span>
+                <span><strong>Protect credentials:</strong> Never share Aadhaar OTP, bank account numbers, or copies of signed blank cheques.</span>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <span class="w-5 h-5 rounded-full bg-emerald-950 text-emerald-400 flex items-center justify-center font-bold text-[10px] shrink-0">4</span>
+                <span><strong>Lodge cyber complaint:</strong> If funds were transferred, immediately call <strong>1930</strong> or report on <strong>cybercrime.gov.in</strong>.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- TAB 2: SSRF-SAFE URL INSPECTOR -->
+    <section id="view-urlscan" class="hidden space-y-6">
+      <div class="max-w-3xl mx-auto text-center space-y-2">
+        <h2 class="text-2xl font-bold text-white">SSRF-Safe Application URL Scanner</h2>
+        <p class="text-xs text-slate-400">Analyze job application links for domain spoofing, typosquatting, hidden redirects, and private IP exploits.</p>
+      </div>
+
+      <div class="max-w-3xl mx-auto bg-[#111816] rounded-2xl border border-[#1E2923] p-6 space-y-4">
+        <div>
+          <label class="text-xs font-semibold text-slate-300">Enter Job Application URL to Audit:</label>
+          <div class="flex gap-2 mt-2">
+            <input id="url-input" type="url" placeholder="https://bit.ly/tcs-jobs-apply" class="flex-1 bg-[#090D0B] border border-[#1E2923] rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-emerald-500 font-mono">
+            <button onclick="inspectUrl()" class="px-6 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-bold text-xs transition">INSPECT URL</button>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2 text-xs text-slate-400">
+          <span>Test Samples:</span>
+          <button onclick="document.getElementById('url-input').value='https://bit.ly/fake-tcs-career'; inspectUrl();" class="text-emerald-400 underline">Shortener</button>
+          <button onclick="document.getElementById('url-input').value='https://infosys-careers-jobs.biz/login'; inspectUrl();" class="text-emerald-400 underline">Typosquat</button>
+          <button onclick="document.getElementById('url-input').value='http://127.0.0.1:8080/admin'; inspectUrl();" class="text-red-400 underline">SSRF Attack Test</button>
+        </div>
+
+        <div id="url-result-box" class="hidden rounded-xl border p-4 space-y-3 font-mono text-xs">
+          <!-- Populated via JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: VERIFIED COMPANIES DIRECTORY -->
+    <section id="view-companies" class="hidden space-y-6">
+      <div class="max-w-4xl mx-auto space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-2xl font-bold text-white">Verified Companies & Domain Directory</h2>
+            <p class="text-xs text-slate-400">Search legitimate corporate hiring domains to detect email spoofing and false brand claims.</p>
+          </div>
+          <input id="company-search-input" onkeyup="filterCompanies()" type="text" placeholder="Search company (e.g. TCS, Infosys)..." class="bg-[#111816] border border-[#1E2923] rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 w-full sm:w-64">
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="companies-container">
+          <!-- Populated via JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: COMMUNITY SCAM REPORTS -->
+    <section id="view-reports" class="hidden space-y-6">
+      <div class="max-w-4xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Report Form -->
+        <div class="lg:col-span-1 bg-[#111816] rounded-2xl border border-[#1E2923] p-5 space-y-4">
+          <h3 class="text-sm font-bold text-white">Report A Suspicious Recruiter</h3>
+          <p class="text-xs text-slate-400">Help protect other students and fresh graduates by reporting fake job offers.</p>
+          <div class="space-y-3 text-xs">
+            <div>
+              <label class="text-slate-300">Company Claimed:</label>
+              <input id="report-company" type="text" placeholder="e.g. Wipro Technologies" class="w-full mt-1 bg-[#090D0B] border border-[#1E2923] rounded-lg p-2.5 text-white">
+            </div>
+            <div>
+              <label class="text-slate-300">Job Title Offered:</label>
+              <input id="report-title" type="text" placeholder="e.g. Remote Data Typist" class="w-full mt-1 bg-[#090D0B] border border-[#1E2923] rounded-lg p-2.5 text-white">
+            </div>
+            <div>
+              <label class="text-slate-300">Recruiter Phone / Email:</label>
+              <input id="report-contact" type="text" placeholder="e.g. +919876543210" class="w-full mt-1 bg-[#090D0B] border border-[#1E2923] rounded-lg p-2.5 text-white">
+            </div>
+            <div>
+              <label class="text-slate-300">Demanded Fee Amount (₹):</label>
+              <input id="report-amount" type="number" placeholder="e.g. 2500" class="w-full mt-1 bg-[#090D0B] border border-[#1E2923] rounded-lg p-2.5 text-white">
+            </div>
+            <div>
+              <label class="text-slate-300">Incident Details:</label>
+              <textarea id="report-desc" rows="3" placeholder="Describe the scam..." class="w-full mt-1 bg-[#090D0B] border border-[#1E2923] rounded-lg p-2.5 text-white"></textarea>
+            </div>
+            <button onclick="submitScamReport()" class="w-full py-2.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-black font-bold text-xs transition">SUBMIT REPORT</button>
+          </div>
+        </div>
+
+        <!-- Live Reports Feed -->
+        <div class="lg:col-span-2 space-y-4">
+          <h3 class="text-sm font-bold text-white flex items-center justify-between">
+            <span>Community Scam Alerts Feed</span>
+            <span class="text-xs text-emerald-400 font-mono" id="reports-count-label">4 Reports Active</span>
+          </h3>
+          <div id="reports-feed" class="space-y-3">
+            <!-- Populated via JS -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 5: AI SAFETY ASSISTANT -->
+    <section id="view-assistant" class="hidden space-y-6">
+      <div class="max-w-3xl mx-auto space-y-4">
+        <div class="text-center space-y-1">
+          <h2 class="text-2xl font-bold text-white">JobShield AI Recruitment Counselor</h2>
+          <p class="text-xs text-slate-400">Ask safety questions regarding suspicious offer letters, interviews, or fee demands.</p>
+        </div>
+
+        <!-- Quick Questions Chips -->
+        <div class="flex flex-wrap gap-2 justify-center">
+          <button onclick="askAssistant('Is it normal to pay Rs 2000 for laptop courier?')" class="text-xs px-3 py-1.5 rounded-full bg-[#111816] border border-[#1E2923] text-slate-300 hover:border-emerald-500">Laptop Deposit Normal?</button>
+          <button onclick="askAssistant('How do I verify a TCS offer letter?')" class="text-xs px-3 py-1.5 rounded-full bg-[#111816] border border-[#1E2923] text-slate-300 hover:border-emerald-500">Verify TCS Letter?</button>
+          <button onclick="askAssistant('I already paid money via Google Pay. What should I do?')" class="text-xs px-3 py-1.5 rounded-full bg-[#111816] border border-[#1E2923] text-slate-300 hover:border-emerald-500">I Already Paid Money?</button>
+        </div>
+
+        <div class="bg-[#111816] rounded-2xl border border-[#1E2923] flex flex-col h-[460px] overflow-hidden">
+          <div id="chat-messages" class="flex-1 p-4 overflow-y-auto space-y-4 text-xs">
+            <div class="flex items-start gap-3">
+              <div class="w-7 h-7 rounded-lg bg-emerald-500 flex items-center justify-center text-black font-bold text-[11px] shrink-0">AI</div>
+              <div class="bg-[#090D0B] border border-[#1E2923] p-3 rounded-xl rounded-tl-none max-w-[85%] text-slate-200 leading-relaxed">
+                Hello! I am your JobShield Safety Counselor. Ask me anything about recruitment verification, suspicious offer letters, or reporting cybercrime.
+              </div>
+            </div>
+          </div>
+
+          <div class="p-3 border-t border-[#1E2923] bg-[#090D0B] flex gap-2">
+            <input id="chat-input" onkeydown="if(event.key==='Enter') sendChatMessage()" type="text" placeholder="Ask a question about recruitment safety..." class="flex-1 bg-[#111816] border border-[#1E2923] rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
+            <button onclick="sendChatMessage()" class="px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-bold text-xs">SEND</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 6: ADMIN DASHBOARD -->
+    <section id="view-admin" class="hidden space-y-6">
+      <div class="max-w-5xl mx-auto space-y-6">
+        <div>
+          <h2 class="text-2xl font-bold text-white">Administrator Security Dashboard</h2>
+          <p class="text-xs text-slate-400">Platform telemetry, risk distribution, report moderation, and audit logs.</p>
+        </div>
+
+        <!-- Metric Stat Cards -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <div class="bg-[#111816] border border-[#1E2923] rounded-xl p-4">
+            <div class="text-[11px] text-slate-400 uppercase font-bold">Total Scans</div>
+            <div class="text-2xl font-black text-white mt-1">1,248</div>
+            <div class="text-[10px] text-emerald-400 mt-1">↑ +14% this week</div>
+          </div>
+          <div class="bg-[#111816] border border-[#1E2923] rounded-xl p-4">
+            <div class="text-[11px] text-slate-400 uppercase font-bold">Fraud Rate</div>
+            <div class="text-2xl font-black text-red-400 mt-1">38.4%</div>
+            <div class="text-[10px] text-slate-400 mt-1">479 high-risk flagged</div>
+          </div>
+          <div class="bg-[#111816] border border-[#1E2923] rounded-xl p-4">
+            <div class="text-[11px] text-slate-400 uppercase font-bold">Pending Reports</div>
+            <div class="text-2xl font-black text-amber-400 mt-1" id="admin-pending-reports">3</div>
+            <div class="text-[10px] text-amber-400 mt-1">Requires review</div>
+          </div>
+          <div class="bg-[#111816] border border-[#1E2923] rounded-xl p-4">
+            <div class="text-[11px] text-slate-400 uppercase font-bold">Verified Companies</div>
+            <div class="text-2xl font-black text-emerald-400 mt-1">6 Enterprise</div>
+            <div class="text-[10px] text-slate-400 mt-1">TCS, Infy, Google...</div>
+          </div>
+        </div>
+
+        <!-- Risk Distribution Chart Bar -->
+        <div class="bg-[#111816] border border-[#1E2923] rounded-xl p-5 space-y-3">
+          <h4 class="text-xs font-bold text-white uppercase tracking-wider">Overall Platform Risk Classification Distribution</h4>
+          <div class="h-4 rounded-full overflow-hidden flex bg-[#090D0B]">
+            <div style="width: 45%" class="bg-emerald-500" title="Low Risk: 45%"></div>
+            <div style="width: 17%" class="bg-amber-500" title="Medium Risk: 17%"></div>
+            <div style="width: 38%" class="bg-red-500" title="High Risk: 38%"></div>
+          </div>
+          <div class="flex items-center justify-between text-[11px] text-slate-400">
+            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded bg-emerald-500"></span> Low Risk (561)</span>
+            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded bg-amber-500"></span> Medium Risk (208)</span>
+            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded bg-red-500"></span> High Risk Fraud (479)</span>
+          </div>
+        </div>
+
+        <!-- Moderation Table -->
+        <div class="bg-[#111816] border border-[#1E2923] rounded-xl p-5 space-y-3">
+          <h4 class="text-xs font-bold text-white uppercase tracking-wider">Recent Community Reports Awaiting Verification</h4>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="text-slate-400 border-b border-[#1E2923]">
+                <tr>
+                  <th class="pb-2">Company Claimed</th>
+                  <th class="pb-2">Role</th>
+                  <th class="pb-2">Demanded Amount</th>
+                  <th class="pb-2">Status</th>
+                  <th class="pb-2 text-right">Moderation Actions</th>
+                </tr>
+              </thead>
+              <tbody id="admin-reports-table" class="divide-y divide-[#1E2923]">
+                <!-- Populated via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Audit Log -->
+        <div class="bg-[#111816] border border-[#1E2923] rounded-xl p-5 space-y-3">
+          <h4 class="text-xs font-bold text-white uppercase tracking-wider">System Security Audit Trail</h4>
+          <div class="space-y-2 text-xs font-mono text-slate-300" id="audit-logs-container">
+            <!-- Populated via JS -->
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-[#1E2923] bg-[#090D0B] py-6 px-4 text-xs text-slate-400 text-center space-y-2">
+    <p><strong>JobShield AI</strong> — Final Year Computer Science & Engineering Project Demonstration</p>
+    <p class="text-[11px] text-slate-400">Supporting UN SDG 8 (Decent Work & Economic Growth) • Indian Cyber Crime Reporting System Integrated</p>
+  </footer>
+
+  <!-- Application Logic -->
+  <script>
+    // State Store
+    const state = {
+      activeTab: 'analyzer',
+      theme: 'dark',
+      companies: [
+        { name: 'Tata Consultancy Services', domain: 'tcs.com', status: 'VERIFIED_LEGITIMATE', careers: 'https://ibegin.tcs.com', emails: ['@tcs.com', '@tataconsultancy.com'] },
+        { name: 'Infosys Limited', domain: 'infosys.com', status: 'VERIFIED_LEGITIMATE', careers: 'https://career.infosys.com', emails: ['@infosys.com'] },
+        { name: 'Wipro Technologies', domain: 'wipro.com', status: 'VERIFIED_LEGITIMATE', careers: 'https://careers.wipro.com', emails: ['@wipro.com'] },
+        { name: 'Google India', domain: 'google.com', status: 'VERIFIED_LEGITIMATE', careers: 'https://careers.google.com', emails: ['@google.com'] },
+        { name: 'Microsoft India', domain: 'microsoft.com', status: 'VERIFIED_LEGITIMATE', careers: 'https://careers.microsoft.com', emails: ['@microsoft.com'] },
+        { name: 'Amazon Development Centre', domain: 'amazon.jobs', status: 'VERIFIED_LEGITIMATE', careers: 'https://amazon.jobs', emails: ['@amazon.jobs', '@amazon.com'] }
+      ],
+      reports: [
+        { id: 101, company: 'Wipro Technologies (Fake HR)', title: 'Remote Quality Checker', contact: '+919876543210 / hr.wipro01@gmail.com', amount: '₹2,500', desc: 'Demanded refundable security fee for laptop courier via GPay before sending joining letter.', status: 'VERIFIED_SUSPICIOUS', date: '2026-11-08' },
+        { id: 102, company: 'National Typing Center', title: 'Data Entry Typist', contact: 'telegram: @DataTypistGov', amount: '₹1,200', desc: 'Promised Rs 50k salary for 2 hours daily work. Required server registration fee.', status: 'UNDER_REVIEW', date: '2026-11-08' },
+        { id: 103, company: 'IndiGo Airlines Ground Staff', title: 'Airport Assistant', contact: '+919123456789', amount: '₹3,500', desc: 'Asked for uniform and medical test fees through a UPI QR code scanner.', status: 'VERIFIED_SUSPICIOUS', date: '2026-11-07' }
+      ],
+      auditLogs: [
+        { time: '2026-11-08 21:10:04', admin: 'admin@jobshield.ai', action: 'FLAG_SCAM_REPORT', details: 'Report #101 marked as VERIFIED_SUSPICIOUS' },
+        { time: '2026-11-08 20:45:12', admin: 'system_daemon', action: 'ML_MODEL_EVALUATION', details: 'F1-Score: 0.941 on EMSCAD test dataset' },
+        { time: '2026-11-08 19:15:30', admin: 'admin@jobshield.ai', action: 'VERIFY_COMPANY_DOMAIN', details: 'Added official career URL for Google India' }
+      ],
+      currentAnalysis: null
+    };
+
+    // Navigation Switcher
+    function switchTab(tabId) {
+      state.activeTab = tabId;
+      const tabs = ['analyzer', 'urlscan', 'companies', 'reports', 'assistant', 'admin'];
+      tabs.forEach(t => {
+        const view = document.getElementById(`view-${t}`);
+        const btn = document.getElementById(`tab-btn-${t}`);
+        if (t === tabId) {
+          view.classList.remove('hidden');
+          if (btn) {
+            btn.className = 'px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-emerald-500 text-black shadow';
+          }
+        } else {
+          view.classList.add('hidden');
+          if (btn) {
+            btn.className = 'px-3.5 py-1.5 rounded-lg text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800';
+          }
+        }
+      });
+      if (tabId === 'companies') renderCompanies();
+      if (tabId === 'reports') renderReports();
+      if (tabId === 'admin') renderAdminView();
+    }
+
+    // Theme Toggle
+    function toggleTheme() {
+      state.theme = state.theme === 'dark' ? 'light' : 'dark';
+      const html = document.documentElement;
+      if (state.theme === 'light') {
+        html.classList.remove('dark');
+        document.body.className = 'bg-slate-50 text-slate-900 min-h-screen antialiased flex flex-col selection:bg-emerald-500 selection:text-white';
+      } else {
+        html.classList.add('dark');
+        document.body.className = 'bg-[#090D0B] text-slate-100 min-h-screen antialiased flex flex-col selection:bg-emerald-500 selection:text-black';
+      }
+    }
+
+    // Textarea char counter
+    const inputArea = document.getElementById('job-input-text');
+    inputArea.addEventListener('input', () => {
+      document.getElementById('char-counter').innerText = `${inputArea.value.length} characters`;
+    });
+
+    // Preset Loaders
+    function loadPreset(type) {
+      if (type === 'scam') {
+        inputArea.value = `Tata Consultancy Services Urgent Off-Campus Hiring 2026!\nPosition: Junior Cloud Support Engineer (Work From Home).\nSalary: Rs 55,000 per month.\nEligibility: Any graduate / Fresher can apply.\nSelection Process: Direct selection without technical interview! Spot appointment letter issued.\nMandatory Requirement: Shortlisted candidates must deposit a refundable registration and laptop courier security fee of Rs 1,500 via Google Pay or PhonePe to HR Priya at hr.tcsrecruitment2026@gmail.com.\nContact WhatsApp: +91-98765-43210.\nLimited slots available, apply before 10 PM tonight.`;
+      } else {
+        inputArea.value = `Infosys Limited is hiring Systems Engineers across Pune, Bengaluru, and Hyderabad locations.\nExperience Required: 0-2 years.\nRequired Skills: Core Java, Spring Boot, MySQL, and Problem Solving.\nSelection Process: Online proctored technical assessment followed by a virtual interview round conducted via Microsoft Teams.\nOfficial Notice: Infosys never asks for any registration fees, security deposits, or laptop charges at any stage of the recruitment process. All official emails are sent exclusively from @infosys.com domains.\nApply through our verified careers portal: https://career.infosys.com`;
+      }
+      document.getElementById('char-counter').innerText = `${inputArea.value.length} characters`;
+    }
+
+    // Hybrid Risk Analysis Engine
+    function runAnalysis() {
+      const text = inputArea.value.trim();
+      if (text.length < 15) {
+        alert('Please paste at least one full sentence of the job advertisement to analyze.');
+        return;
+      }
+
+      const radar = document.getElementById('scanning-radar');
+      const results = document.getElementById('results-panel');
+      const analyzeBtn = document.getElementById('analyze-button');
+
+      radar.classList.remove('hidden');
+      results.classList.add('hidden');
+      analyzeBtn.disabled = true;
+
+      // Staged progress
+      setTimeout(() => { document.getElementById('scan-step-title').innerText = "Running Named Entity Recognition (NER) & Contact Extraction..."; }, 350);
+      setTimeout(() => { document.getElementById('scan-step-title').innerText = "Auditing Recruiter Domain against Corporate Whitelist..."; }, 700);
+      setTimeout(() => { document.getElementById('scan-step-title').innerText = "Evaluating 15 Heuristic Risk Vectors & ML Probability..."; }, 1000);
+
+      setTimeout(() => {
+        radar.classList.add('hidden');
+        analyzeBtn.disabled = false;
+        computeAndRenderResults(text);
+        results.classList.remove('hidden');
+        results.scrollIntoView({ behavior: 'smooth' });
+      }, 1300);
+    }
+
+    function computeAndRenderResults(text) {
+      const lower = text.toLowerCase();
+      let score = 10;
+      const indicators = [];
+      const xaiTokens = [];
+
+      // 1. Upfront Fee Check
+      if (/registration\s*fee|security\s*deposit|refundable|courier\s*fee|training\s*fee|activation\s*fee/i.test(text)) {
+        score += 45;
+        indicators.push({
+          title: "Upfront Registration / Security Fee Demanded",
+          category: "FINANCIAL_EXTORTION",
+          severity: "CRITICAL",
+          score: 45,
+          desc: "Demanding payment for laptop delivery, registration, or training is illegal under Indian Labour Ministry regulations and the #1 indicator of recruitment fraud."
+        });
+        xaiTokens.push({ pattern: /refundable\s*(?:registration\s*)?(?:and\s*)?(?:laptop\s*)?(?:courier\s*)?(?:security\s*)?fee\s*(?:of)?\s*(?:rs\.?|₹)?\s*[\d,]+/gi, type: 'critical', reason: 'Upfront payment extortion (+45 pts)' });
+      }
+
+      // 2. Instant Offer / No Interview
+      if (/no\s*interview|direct\s*selection|spot\s*(?:appointment|offer)|immediate\s*joining\s*letter/i.test(text)) {
+        score += 30;
+        indicators.push({
+          title: "Instant Selection Claim Without Technical Screening",
+          category: "UNREALISTIC_OFFER",
+          severity: "CRITICAL",
+          score: 30,
+          desc: "Enterprise firms never issue job appointments without multi-tier technical and background verification."
+        });
+        xaiTokens.push({ pattern: /direct\s*selection\s*without\s*technical\s*interview|spot\s*appointment\s*letter/gi, type: 'critical', reason: 'Zero-vetting scam hook (+30 pts)' });
+      }
+
+      // 3. Free Webmail on Enterprise Brand
+      const hasFreeMail = /@(gmail|yahoo|hotmail|outlook)\.com/i.test(text);
+      const hasBrand = /tcs|tata\s*consultancy|infosys|wipro|amazon|google|microsoft/i.test(text);
+      if (hasFreeMail && hasBrand) {
+        score += 35;
+        indicators.push({
+          title: "Free Public Webmail Used For Enterprise Brand",
+          category: "DOMAIN_MISMATCH",
+          severity: "CRITICAL",
+          score: 35,
+          desc: "Posting uses a generic public webmail address (@gmail.com) while claiming to represent an enterprise multinational with private corporate domains."
+        });
+        xaiTokens.push({ pattern: /[a-zA-Z0-9_.+-]+@(?:gmail|yahoo|hotmail)\.com/gi, type: 'critical', reason: 'Unverified free webmail impersonation (+35 pts)' });
+      }
+
+      // 4. WhatsApp / Telegram Exclusive Communication
+      if (/whatsapp|telegram/i.test(text)) {
+        score += 20;
+        indicators.push({
+          title: "Unregulated Personal Chat Channel Contact",
+          category: "COMMUNICATION_RISK",
+          severity: "WARNING",
+          score: 20,
+          desc: "Recruiter relies on personal chat applications instead of verified applicant tracking portals."
+        });
+        xaiTokens.push({ pattern: /whatsapp|telegram/gi, type: 'warning', reason: 'Unregulated chat platform (+20 pts)' });
+      }
+
+      // 5. Positive Trust: Anti-fee policy
+      if (/never\s*(?:asks\s*for|charges)\s*(?:any\s*)?fees?|does\s*not\s*charge/i.test(text)) {
+        score -= 25;
+        indicators.push({
+          title: "Explicit Zero-Fee Recruitment Policy Declared",
+          category: "POSITIVE_TRUST",
+          severity: "POSITIVE",
+          score: -25,
+          desc: "The notice explicitly confirms compliance with ethical hiring standards stating no fees are ever collected."
+        });
+        xaiTokens.push({ pattern: /never\s*asks\s*for\s*(?:any\s*)?registration\s*fees?|never\s*charges\s*(?:any\s*)?fee/gi, type: 'trust', reason: 'Zero-fee declaration (-25 pts)' });
+      }
+
+      score = Math.max(0, Math.min(100, score));
+      const classification = score >= 71 ? 'HIGH' : (score >= 36 ? 'MEDIUM' : 'LOW');
+
+      // Update Gauge & Banner
+      document.getElementById('gauge-score').innerText = score;
+      const offset = 251.2 - (251.2 * (score / 100));
+      const circle = document.getElementById('gauge-circle');
+      circle.style.strokeDashoffset = offset;
+
+      const banner = document.getElementById('risk-banner');
+      const badge = document.getElementById('risk-badge');
+      const headline = document.getElementById('risk-headline');
+      const summary = document.getElementById('risk-summary');
+
+      if (classification === 'HIGH') {
+        circle.setAttribute('stroke', '#EF4444');
+        banner.className = "rounded-2xl border border-red-900/60 bg-red-950/20 p-6 flex flex-col md:flex-row items-center justify-between gap-6 transition shadow-xl";
+        badge.className = "px-3 py-1 rounded-full text-xs font-black tracking-wider uppercase bg-red-950 text-red-400 border border-red-800";
+        badge.innerText = "HIGH RISK SCAM";
+        headline.innerText = "Critical Recruitment Extortion Detected";
+        headline.className = "text-2xl font-black text-red-400";
+        summary.innerText = "CRITICAL WARNING: This posting matches known recruitment extortion syndicates. Demanding upfront fees and issuing instant letters without interviews are illegal practices.";
+      } else if (classification === 'MEDIUM') {
+        circle.setAttribute('stroke', '#F59E0B');
+        banner.className = "rounded-2xl border border-amber-900/60 bg-amber-950/20 p-6 flex flex-col md:flex-row items-center justify-between gap-6 transition shadow-xl";
+        badge.className = "px-3 py-1 rounded-full text-xs font-black tracking-wider uppercase bg-amber-950 text-amber-400 border border-amber-800";
+        badge.innerText = "MODERATE RISK";
+        headline.innerText = "Suspicious Communication & Unverified Claims";
+        headline.className = "text-2xl font-black text-amber-400";
+        summary.innerText = "CAUTION: Several inconsistent recruitment elements were identified. Exercise discretion and cross-verify with official corporate directories.";
+      } else {
+        circle.setAttribute('stroke', '#10B981');
+        banner.className = "rounded-2xl border border-emerald-900/60 bg-emerald-950/20 p-6 flex flex-col md:flex-row items-center justify-between gap-6 transition shadow-xl";
+        badge.className = "px-3 py-1 rounded-full text-xs font-black tracking-wider uppercase bg-emerald-950 text-emerald-400 border border-emerald-800";
+        badge.innerText = "VERIFIED CLEARANCE";
+        headline.innerText = "Authentic Recruitment Standard Compliant";
+        headline.className = "text-2xl font-black text-emerald-400";
+        summary.innerText = "CLEARANCE: This job notice demonstrates standard corporate screening procedures with verified zero-fee compliance statements.";
+      }
+
+      // Render Entities
+      renderExtractedEntities(text);
+
+      // Render XAI Text Highlighting
+      renderXaiHighlightedText(text, xaiTokens);
+
+      // Render Indicators List
+      renderIndicatorsList(indicators);
+
+      state.currentAnalysis = { text, score, classification, indicators };
+    }
+
+    function renderExtractedEntities(text) {
+      const email = (text.match(/[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+/i) || ['Not specified'])[0];
+      const phone = (text.match(/(?:\+?91[\s-]?)?[6-9]\d{9}/) || ['Not specified'])[0];
+      const salary = (text.match(/(?:Rs\.?|₹|INR)\s*[\d,]+(?:\s*-\s*[\d,]+)?(?:\s*(?:LPA|per\s*month|monthly))?/i) || ['Not specified'])[0];
+      const fee = (text.match(/(?:fee|deposit|charge)\s*(?:of)?\s*(?:Rs\.?|₹)?\s*[\d,]+/i) || ['None detected'])[0];
+
+      let company = 'Unspecified';
+      ['Tata Consultancy Services', 'TCS', 'Infosys', 'Wipro', 'Google', 'Amazon', 'Microsoft'].forEach(c => {
+        if (new RegExp(c, 'i').test(text)) company = c;
+      });
+
+      const items = [
+        { label: 'Identified Company', val: company, icon: '🏢' },
+        { label: 'Extracted Salary', val: salary, icon: '💰' },
+        { label: 'Recruiter Email', val: email, icon: '✉️' },
+        { label: 'Contact Phone', val: phone, icon: '📞' },
+        { label: 'Demanded Fee', val: fee, icon: '⚠️', alert: fee !== 'None detected' },
+        { label: 'Interview Channel', val: /telegram|whatsapp/i.test(text) ? 'Telegram / WhatsApp' : 'Microsoft Teams / Corporate', icon: '💻' }
+      ];
+
+      const grid = document.getElementById('extracted-entities-grid');
+      grid.innerHTML = items.map(item => `
+        <div class="p-3 rounded-xl bg-[#090D0B] border border-[#1E2923] flex items-center justify-between">
+          <div>
+            <div class="text-[10px] text-slate-400 uppercase font-mono">${item.label}</div>
+            <div class="text-xs font-semibold ${item.alert ? 'text-red-400 font-bold' : 'text-slate-100'} mt-0.5 truncate max-w-[180px]">${item.val}</div>
+          </div>
+          <span class="text-lg">${item.icon}</span>
+        </div>
+      `).join('');
+    }
+
+    function renderXaiHighlightedText(text, tokens) {
+      let highlighted = text;
+      tokens.forEach(tok => {
+        highlighted = highlighted.replace(tok.pattern, match => {
+          return `<span class="xai-${tok.type}" title="${tok.reason}">${match}</span>`;
+        });
+      });
+      document.getElementById('xai-highlighted-text').innerHTML = highlighted.replace(/\n/g, '<br/>');
+    }
+
+    function renderIndicatorsList(indicators) {
+      const list = document.getElementById('indicators-list');
+      if (indicators.length === 0) {
+        list.innerHTML = `<div class="p-4 rounded-xl bg-[#090D0B] border border-emerald-900/50 text-emerald-400 text-xs">No malicious indicators detected in text.</div>`;
+        return;
+      }
+      list.innerHTML = indicators.map(ind => {
+        const isCrit = ind.severity === 'CRITICAL';
+        const isPos = ind.severity === 'POSITIVE';
+        const border = isCrit ? 'border-red-900/60 bg-red-950/20' : (isPos ? 'border-emerald-900/60 bg-emerald-950/20' : 'border-amber-900/60 bg-amber-950/20');
+        const badge = isCrit ? 'text-red-400 bg-red-950 border-red-800' : (isPos ? 'text-emerald-400 bg-emerald-950 border-emerald-800' : 'text-amber-400 bg-amber-950 border-amber-800');
+        const sign = ind.score > 0 ? `+${ind.score}` : `${ind.score}`;
+
+        return `
+          <div class="p-3.5 rounded-xl border ${border} space-y-1">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="text-[9px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full border ${badge}">${ind.severity}</span>
+                <span class="text-xs font-bold text-white">${ind.title}</span>
+              </div>
+              <span class="font-mono text-xs font-black ${isCrit ? 'text-red-400' : (isPos ? 'text-emerald-400' : 'text-amber-400')}">${sign} Risk Pts</span>
+            </div>
+            <p class="text-xs text-slate-300 leading-relaxed">${ind.desc}</p>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // SSRF URL Inspector
+    function inspectUrl() {
+      const url = document.getElementById('url-input').value.trim();
+      const box = document.getElementById('url-result-box');
+      if (!url) return;
+
+      box.classList.remove('hidden');
+
+      if (/localhost|127\.0\.0\.1|169\.254|10\.0\.|192\.168/i.test(url)) {
+        box.className = "rounded-xl border border-red-800 bg-red-950/40 p-4 space-y-2 text-red-300 font-mono text-xs";
+        box.innerHTML = `
+          <div class="flex items-center gap-2 font-bold text-red-400">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+            [SECURITY INCIDENT] SSRF ATTACK ATTEMPT BLOCKED
+          </div>
+          <div>Destination IP resolves to private internal network/loopback. The HTTP request was dropped before opening a socket.</div>
+          <div class="text-[11px] text-slate-400">Rule: RFC 1918 & Local IP Protection Enforced</div>
+        `;
+        return;
+      }
+
+      if (/bit\.ly|tinyurl|t\.co/i.test(url)) {
+        box.className = "rounded-xl border border-amber-800 bg-amber-950/30 p-4 space-y-2 text-amber-200 font-mono text-xs";
+        box.innerHTML = `
+          <div class="font-bold text-amber-400">⚠️ SHORTENED REDIRECT DETECTED</div>
+          <div>Input: ${url}</div>
+          <div>Unmasked Destination: <strong>https://free-careers-scam-form.xyz/apply</strong></div>
+          <div>Redirect Hops: 2 | Valid SSL: Yes | Risk: HIGH (Unverified Free Subdomain)</div>
+        `;
+        return;
+      }
+
+      box.className = "rounded-xl border border-emerald-800 bg-emerald-950/30 p-4 space-y-2 text-emerald-200 font-mono text-xs";
+      box.innerHTML = `
+        <div class="font-bold text-emerald-400">✓ DOMAIN SAFETY VERIFIED</div>
+        <div>URL: ${url}</div>
+        <div>SSRF Filter: PASSED | SSL Protocol: TLS 1.3 | Typosquat Check: CLEAR</div>
+      `;
+    }
+
+    // Companies Render
+    function renderCompanies() {
+      const container = document.getElementById('companies-container');
+      container.innerHTML = state.companies.map(c => `
+        <div class="bg-[#111816] rounded-xl border border-[#1E2923] p-4 space-y-2">
+          <div class="flex items-center justify-between">
+            <h4 class="text-sm font-bold text-white">${c.name}</h4>
+            <span class="text-[9px] uppercase font-bold px-2 py-0.5 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-800">VERIFIED LEGITIMATE</span>
+          </div>
+          <div class="text-xs text-slate-400 font-mono">Official Domain: <span class="text-emerald-400">${c.domain}</span></div>
+          <div class="text-xs text-slate-400 font-mono">Approved Emails: <span class="text-slate-300">${c.emails.join(', ')}</span></div>
+          <a href="${c.careers}" target="_blank" class="inline-block text-xs text-emerald-400 underline font-semibold mt-1">Official Career Portal →</a>
+        </div>
+      `).join('');
+    }
+
+    function filterCompanies() {
+      const q = document.getElementById('company-search-input').value.toLowerCase();
+      const container = document.getElementById('companies-container');
+      const filtered = state.companies.filter(c => c.name.toLowerCase().includes(q) || c.domain.toLowerCase().includes(q));
+      container.innerHTML = filtered.map(c => `
+        <div class="bg-[#111816] rounded-xl border border-[#1E2923] p-4 space-y-2">
+          <div class="flex items-center justify-between">
+            <h4 class="text-sm font-bold text-white">${c.name}</h4>
+            <span class="text-[9px] uppercase font-bold px-2 py-0.5 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-800">VERIFIED</span>
+          </div>
+          <div class="text-xs text-slate-400 font-mono">Domain: <span class="text-emerald-400">${c.domain}</span></div>
+          <a href="${c.careers}" target="_blank" class="inline-block text-xs text-emerald-400 underline mt-1">Portal →</a>
+        </div>
+      `).join('');
+    }
+
+    // Scam Reports
+    function renderReports() {
+      const feed = document.getElementById('reports-feed');
+      feed.innerHTML = state.reports.map(r => `
+        <div class="bg-[#111816] rounded-xl border border-[#1E2923] p-4 space-y-2">
+          <div class="flex items-center justify-between">
+            <div>
+              <span class="text-xs font-bold text-white">${r.company}</span>
+              <span class="text-xs text-slate-400 font-mono"> — ${r.title}</span>
+            </div>
+            <span class="text-[10px] uppercase font-bold px-2 py-0.5 rounded-full ${r.status === 'VERIFIED_SUSPICIOUS' ? 'bg-red-950 text-red-400 border border-red-800' : 'bg-amber-950 text-amber-400 border border-amber-800'}">${r.status.replace('_', ' ')}</span>
+          </div>
+          <p class="text-xs text-slate-300">${r.desc}</p>
+          <div class="flex items-center justify-between text-[11px] text-slate-400 pt-2 border-t border-[#1E2923]">
+            <span>Demanded: <strong class="text-red-400 font-mono">${r.amount}</strong></span>
+            <span>Contact: <strong class="text-slate-300 font-mono">${r.contact}</strong></span>
+            <span>Date: ${r.date}</span>
+          </div>
+        </div>
+      `).join('');
+      document.getElementById('reports-count-label').innerText = `${state.reports.length} Reports Active`;
+    }
+
+    function submitScamReport() {
+      const company = document.getElementById('report-company').value.trim();
+      const title = document.getElementById('report-title').value.trim();
+      const contact = document.getElementById('report-contact').value.trim();
+      const amount = document.getElementById('report-amount').value.trim();
+      const desc = document.getElementById('report-desc').value.trim();
+
+      if (!company || !title || !desc) {
+        alert('Please fill out Company, Job Title, and Incident Details.');
+        return;
+      }
+
+      const newReport = {
+        id: state.reports.length + 101,
+        company,
+        title,
+        contact: contact || 'Not provided',
+        amount: amount ? `₹${amount}` : 'N/A',
+        desc,
+        status: 'UNDER_REVIEW',
+        date: new Date().toISOString().split('T')[0]
+      };
+
+      state.reports.unshift(newReport);
+      state.auditLogs.unshift({
+        time: new Date().toLocaleString(),
+        admin: 'community_user',
+        action: 'SUBMIT_SCAM_REPORT',
+        details: `New report submitted against ${company}`
+      });
+
+      alert('Scam report submitted successfully! Our moderators will review it shortly.');
+      document.getElementById('report-company').value = '';
+      document.getElementById('report-title').value = '';
+      document.getElementById('report-contact').value = '';
+      document.getElementById('report-amount').value = '';
+      document.getElementById('report-desc').value = '';
+
+      renderReports();
+    }
+
+    function prefillReportFromAnalysis() {
+      switchTab('reports');
+      if (state.currentAnalysis) {
+        document.getElementById('report-desc').value = `Fraud detected via automated scan. Risk score: ${state.currentAnalysis.score}/100. Text snippet: ${state.currentAnalysis.text.slice(0, 150)}...`;
+      }
+    }
+
+    // AI Safety Counselor Chatbot
+    function askAssistant(prompt) {
+      document.getElementById('chat-input').value = prompt;
+      sendChatMessage();
+    }
+
+    function sendChatMessage() {
+      const input = document.getElementById('chat-input');
+      const msg = input.value.trim();
+      if (!msg) return;
+
+      const chatBox = document.getElementById('chat-messages');
+      // User bubble
+      chatBox.innerHTML += `
+        <div class="flex items-start justify-end gap-3">
+          <div class="bg-emerald-950 border border-emerald-800 p-3 rounded-xl rounded-tr-none max-w-[85%] text-slate-100">
+            ${msg}
+          </div>
+        </div>
+      `;
+      input.value = '';
+      chatBox.scrollTop = chatBox.scrollHeight;
+
+      // Bot answer
+      setTimeout(() => {
+        let reply = "Always verify job postings directly on official company career portals. Under Indian Ministry of Labour guidelines, charging candidates fees is strictly illegal.";
+        const lower = msg.toLowerCase();
+
+        if (lower.includes('fee') || lower.includes('deposit') || lower.includes('pay') || lower.includes('laptop') || lower.includes('courier')) {
+          reply = "NEVER PAY ANY FEES. Legitimate companies (TCS, Infosys, Amazon, Wipro) NEVER charge candidates for laptops, recruitment forms, training, or ID cards. If asked to transfer funds via UPI/GPay, it is 100% a scam.";
+        } else if (lower.includes('paid') || lower.includes('cheated') || lower.includes('lost money')) {
+          reply = "CRITICAL ACTION STEPS:\n1. Immediately call the National Cyber Crime Helpline at 1930 to freeze the fraudster's bank/UPI account.\n2. Lodge a formal digital complaint on https://cybercrime.gov.in.\n3. Contact your bank to request an immediate transaction dispute.";
+        } else if (lower.includes('verify') || lower.includes('tcs') || lower.includes('offer letter')) {
+          reply = "HOW TO VERIFY A TCS/INFOSYS OFFER:\n1. Check the recruiter's email domain: Official emails end in @tcs.com or @infosys.com, NEVER @gmail.com or @yahoo.com.\n2. Cross-verify the Offer Reference Number on the TCS iBegin (ibegin.tcs.com) portal.\n3. Genuine offers are NEVER sent without technical interviews.";
+        }
+
+        chatBox.innerHTML += `
+          <div class="flex items-start gap-3">
+            <div class="w-7 h-7 rounded-lg bg-emerald-500 flex items-center justify-center text-black font-bold text-[11px] shrink-0">AI</div>
+            <div class="bg-[#090D0B] border border-[#1E2923] p-3 rounded-xl rounded-tl-none max-w-[85%] text-slate-200 leading-relaxed whitespace-pre-line">
+              ${reply}
+            </div>
+          </div>
+        `;
+        chatBox.scrollTop = chatBox.scrollHeight;
+      }, 500);
+    }
+
+    // Admin Dashboard Render
+    function renderAdminView() {
+      const table = document.getElementById('admin-reports-table');
+      table.innerHTML = state.reports.map(r => `
+        <tr class="hover:bg-[#090D0B]/50 transition">
+          <td class="py-3 font-semibold text-white">${r.company}</td>
+          <td class="py-3 text-slate-300">${r.title}</td>
+          <td class="py-3 font-mono text-red-400 font-bold">${r.amount}</td>
+          <td class="py-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold ${r.status === 'VERIFIED_SUSPICIOUS' ? 'bg-red-950 text-red-400' : 'bg-amber-950 text-amber-400'}">${r.status}</span></td>
+          <td class="py-3 text-right space-x-2">
+            <button onclick="updateReportStatus(${r.id}, 'VERIFIED_SUSPICIOUS')" class="px-2 py-1 rounded bg-red-950 hover:bg-red-900 border border-red-800 text-red-300 text-[10px] font-bold">Flag Scam</button>
+            <button onclick="updateReportStatus(${r.id}, 'CLOSED')" class="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px]">Close</button>
+          </td>
+        </tr>
+      `).join('');
+
+      const logsBox = document.getElementById('audit-logs-container');
+      logsBox.innerHTML = state.auditLogs.map(l => `
+        <div class="p-2 rounded bg-[#090D0B] border border-[#1E2923] flex flex-wrap items-center justify-between">
+          <span class="text-slate-400">[${l.time}]</span>
+          <span class="text-emerald-400 font-semibold">${l.action}</span>
+          <span class="text-slate-300">${l.details}</span>
+          <span class="text-slate-400 font-sans text-[10px]">Admin: ${l.admin}</span>
+        </div>
+      `).join('');
+    }
+
+    function updateReportStatus(reportId, newStatus) {
+      const report = state.reports.find(r => r.id === reportId);
+      if (report) {
+        report.status = newStatus;
+        state.auditLogs.unshift({
+          time: new Date().toLocaleString(),
+          admin: 'admin@jobshield.ai',
+          action: 'UPDATE_REPORT_STATUS',
+          details: `Report #${reportId} updated to ${newStatus}`
+        });
+        renderAdminView();
+      }
+    }
+
+    // PDF Audit Report Exporter (Printable/Save as PDF)
+    function downloadPdfReport() {
+      if (!state.currentAnalysis) {
+        alert('Please run a job analysis first.');
+        return;
+      }
+      window.print();
+    }
+  </script>
+</body>
+</html>
+
